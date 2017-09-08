@@ -21,8 +21,10 @@ class UploadPOSTHandler(BaseHandler):
 
     @gen.coroutine
     def post(self):
-        if self.request.arguments.get("user_dir"):
+        print self.request.arguments.get("user_dir")
+        if self.request.arguments.get("user_dir")[0]:
             user_dir = self.request.arguments.get("user_dir")[0]
+
         else:
             import hashlib
             md = hashlib.md5()
@@ -39,7 +41,7 @@ class UploadPOSTHandler(BaseHandler):
                 file_path = os.path.join(user_path, filename)
                 with open(r'%s' % file_path, "w") as data:
                     data.write(body)
-        print user_path
+        print "upload finished"
         res = yield executor.submit(data_analysis, user_path, 20)
         print "finished"
         self.render("data_analysis.html", res=res)
