@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  {% block head %}
+    <meta charset="UTF-8">
+    <title>{{ escape(handler.settings["blog_title"]) }}</title>
+    <!--<link rel="alternate" href="/feed" type="application/atom+xml" title="{{ escape(handler.settings["blog_title"]) }}">-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">-->
+    <!--<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css"></head>-->
+    <link rel="stylesheet" type="text/css" href="/static/Semantic-UI-CSS-master/semantic.min.css">
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous"></script>
+    <script src="/static/Semantic-UI-CSS-master/semantic.min.js"></script>
+    {% end %}
+
+
+
+<div class="pure-menu pure-menu-horizontal">
+    <span class="pure-menu-heading">Yahoo Sites</span>
+
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Flickr</a></li>
+        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Messenger</a></li>
+        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Sports</a></li>
+        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Finance</a></li>
+        <li class="pure-menu-heading">More Sites</li>
+        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Games</a></li>
+        <li class="pure-menu-item"><a href="#" class="pure-menu-link">News</a></li>
+        <li class="pure-menu-item"><a href="#" class="pure-menu-link">OMG!</a></li>
+    </ul>
+          <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="#" id="menuLink1" class="pure-menu-link">Contact</a>
+    <ul class="pure-menu-children">
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Email</a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Twitter</a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Tumblr Blog</a></li>
+    </ul>
+</div>
+
+
+
+<body>
+    <div id="body">
+      <div id="header">
+        <div style="float:right">
+
+            {% if current_user %}
+            <div>hello! {{ current_user["username"].encode('utf-8') }}</div>
+            <a href="/compose">{{ _("新文章") }}</a>
+            <a href="/auth/logout?next={{ url_escape(request.uri) }}">{{ _("退出") }}</a>
+          {% else %}
+            {% raw _('<a href="%(url)s">注册</a>') % {"url": "/auth/create?next=" + url_escape(request.uri)} %}
+            {% raw _('<a href="%(url)s">登陆</a>') % {"url": "/auth/login?next=" + url_escape(request.uri)} %}
+          {% end %}
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+<div class="ui top attached tabular menu">
+    <h1><a href="/">{{ escape(handler.settings["blog_title"]) }}</a></h1>
+</div>
+
+<div class="ui special cards">
+  <div class="card">
+    <div class="blurring dimmable image">
+      <div class="ui dimmer">
+        <div class="content">
+          <div class="center">
+            <div class="ui inverted button">Add Friend</div>
+          </div>
+        </div>
+      </div>
+      <img src="static/imgs/IMG_1061.PNG">
+    </div>
+    <div class="content">
+      <a class="header">Team Fu</a>
+      <div class="meta">
+        <span class="date">Create in Sep 2014</span>
+      </div>
+    </div>
+    <div class="extra content">
+      <a>
+        <i class="users icon"></i>
+        2 Members
+      </a>
+    </div>
+  </div>
+</div>
+
+    <div >
+      <div  id="content">{% block body %}{% end %}</div>
+        </div>
+    </div>
+
+    {% block bottom %}{% end %}
+</body>
+</html>

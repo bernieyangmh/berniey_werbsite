@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+
+<!--<div class="ui raised very padded text container segment">-->
+<h3 class="ui horizontal divider header"><i class="tag icon"></i> 状态码--访问次数 </h3>
+
+<table class="ui striped table">
+  <thead>
+    <tr>
+      <th>状态码</th>
+      <th>访问次数</th>
+    </tr>
+  </thead>
+
+
+  <tbody>
+    {% for i in res.get('code_num') %}
+    <tr>
+      <td>{{ i[0] }}</td>
+      <td>{{ i[1] }}</td>
+    </tr>
+    {% end %}
+  </tbody>
+
+</table>
+<h3 class="ui horizontal divider header"><i class="tag icon"></i> 链接--流量 </h3>
+
+<table class="ui striped table">
+  <thead>
+    <tr>
+      <th>url</th>
+      <th>流量</th>
+    </tr>
+  </thead>
+
+    <tbody>
+    {% for i in res.get('url_flx') %}
+    <tr>
+      <td>{{ i[0] }}</td>
+      <td>{{ i[1] }}</td>
+    </tr>
+    {% end %}
+  </tbody>
+</table>
+<h3 class="ui horizontal divider header"><i class="tag icon"></i> 链接--访问次数 </h3>
+
+<table class="ui striped table">
+
+  <thead>
+    <tr>
+      <th>url</th>
+      <th>访问次数</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in res.get('url_num') %}
+    <tr>
+      <td>{{ i[0] }}</td>
+      <td>{{ i[1] }}</td>
+    </tr>
+    {% end %}
+  </tbody>
+</table>
+<h3 class="ui horizontal divider header"><i class="tag icon"></i> IP--流量 </h3>
+
+<table class="ui striped table">
+
+  <thead>
+    <tr>
+      <th>ip</th>
+      <th>流量</th>
+    </tr>
+  </thead>
+    <tbody>
+    {% for i in res.get('ip_flx') %}
+    <tr>
+      <td>{{ i[0] }}</td>
+      <td>{{ i[1] }}</td>
+    </tr>
+    {% end %}
+  </tbody>
+</table>
+<h3 class="ui horizontal divider header"><i class="tag icon"></i> IP--访问次数 </h3>
+
+<table class="ui striped table">
+
+  <thead>
+    <tr>
+      <th>ip</th>
+      <th>访问次数</th>
+    </tr>
+  </thead>
+    <tbody>
+    {% for i in res.get('ip_num') %}
+    <tr>
+      <td>{{ i[0] }}</td>
+      <td>{{ i[1] }}</td>
+    </tr>
+    {% end %}
+  </tbody>
+</table>
+<!--</div>-->
+{% end %}

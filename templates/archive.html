@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <style type="text/css">
+    ul.archive {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    ul.archive li {
+      margin-bottom: 1em;
+    }
+
+    ul.archive .title {
+      font-family: "Helvetica Nue", Helvetica, Arial, sans-serif;
+      font-size: 14pt;
+    }
+  </style>
+{% end %}
+
+{% block body %}
+  <ul class="archive">
+    {% for article in articles %}
+      <li>
+        <div class="title"><a href="/article/{{ article.slug }}">文章名：{{ article.title }}</a></div>
+        <div class="date">发表时间：{{ locale.format_date(article.created_time, full_format=True, shorter=True) }}</div>
+      </li>
+    {% end %}
+  </ul>
+{% end %}
