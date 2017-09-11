@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 import time
 import re
@@ -8,7 +8,7 @@ import tornado.web
 import markdown
 import unicodedata
 from tornado.queues import Queue
-from extends.utils import get_timestamp_date
+from extends.utils import get_timestamp_date, url_decode_encode
 
 
 
@@ -112,11 +112,17 @@ class ToolsHandler(BaseHandler):
 
     def post(self, *args, **kwargs):
         print "ToolsHandler_post"
-        print args
-        print kwargs
-        if self.get_arguments("timestamp")[0]:
+
+        if self.get_arguments("timestamp"):
             timestamp_data_res = get_timestamp_date(self.get_arguments("timestamp")[0])
         else:
             timestamp_data_res = None
-        print timestamp_data_res
-        self.render("tools.html", timestamp_data_res=timestamp_data_res)
+
+        if self.get_arguments("urlcode"):
+            url = self.get_arguments("urlcode")[0]
+            print url
+            print type(url)
+            url_code = url_decode_encode(url)
+        else:
+            url_code = None
+        self.render("tools.html", timestamp_data_res=timestamp_data_res, url_code=url_code)

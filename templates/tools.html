@@ -7,14 +7,26 @@
 <body>
 
 <div>timestamp</div>
-<form id="my_form" name="form" action="/tools/timestamp" method="POST" enctype="multipart/form-data">
-    <div id="main">
+<form name="form" action="/tools/timestamp" method="POST" enctype="multipart/form-data">
+    <div>
         <input name="timestamp" type="text" class="shchlj" value=""/>
         <input type="submit" value="提交"/>
     </div>
 </form>
 {% if timestamp_data_res %}
 <div>{{ timestamp_data_res }}</div>
+{% end %}
+
+
+<div>url编解码</div>
+<form name="form" action="/tools/urlcode" method="POST" enctype="multipart/form-data">
+    <div>
+        <input name="urlcode" type="text" value=""/>
+        <input type="submit" value="提交"/>
+    </div>
+</form>
+{% if url_code %}
+<div>{{ url_code }}</div>
 {% end %}
 
 </body>

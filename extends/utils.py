@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # !/usr/bin/env python
 
-
-from data_analysis.data import DataCore
-from data_analysis.util import print_summary_information
 import sys
 import re
 import time
+import urllib
+from data_analysis.data import DataCore
+from data_analysis.util import print_summary_information
+
 
 def data_analysis(path, num):
     print "data_analysis"
@@ -27,3 +28,8 @@ def get_timestamp_date(timestamp_data):
     else:
         timestamp_data_res = "格式不匹配"
     return timestamp_data_res
+
+
+def url_decode_encode(url):
+    return urllib.quote_plus(url.encode('utf-8')
+)
