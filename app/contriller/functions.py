@@ -1,12 +1,20 @@
 # coding=utf-8
 
+import time
+import re
+
 from .base import BaseHandler
 import tornado.web
 import markdown
 import unicodedata
-import re
 from tornado.queues import Queue
+from extends.utils import get_timestamp_date
+
+
+
 d = {}
+
+
 
 class ComposeHandler(BaseHandler):
     @tornado.web.authenticated
@@ -94,3 +102,21 @@ class FeedBackHandler(BaseHandler):
 class Test1Handler(BaseHandler):
     def get(self, *args, **kwargs):
         self.render("test.html")
+
+
+class ToolsHandler(BaseHandler):
+
+    def get(self, *args, **kwargs):
+        timestamp=None
+        self.render("tools.html", timestamp=timestamp)
+
+    def post(self, *args, **kwargs):
+        print "ToolsHandler_post"
+        print args
+        print kwargs
+        if self.get_arguments("timestamp")[0]:
+            timestamp_data_res = get_timestamp_date(self.get_arguments("timestamp")[0])
+        else:
+            timestamp_data_res = None
+        print timestamp_data_res
+        self.render("tools.html", timestamp_data_res=timestamp_data_res)

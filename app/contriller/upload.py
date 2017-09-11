@@ -53,11 +53,3 @@ class UploadHtmlHandler(BaseHandler):
         print "UploadHtmlHandler_get"
         self.render("upload.html")
 
-
-class AnalysisHandler(BaseHandler):
-
-    @gen.coroutine
-    def get(self):
-        res = yield executor.submit(data_analysis, path, 20)
-        self.render("data_analysis.html", res=res)
-

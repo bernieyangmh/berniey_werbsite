@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div>timestamp</div>
+<form id="my_form" name="form" action="/tools/timestamp" method="POST" enctype="multipart/form-data">
+    <div id="main">
+        <input name="timestamp" type="text" class="shchlj" value=""/>
+        <input type="submit" value="提交"/>
+    </div>
+</form>
+{% if timestamp_data_res %}
+<div>{{ timestamp_data_res }}</div>
+{% end %}
+
+</body>
+</html>

@@ -25,8 +25,7 @@ class ArticleModule(tornado.web.UIModule):
 
 
 def main():
-    http_server = tornado.httpserver.HTTPServer(Application())
-    # http_server = tornado.httpserver.HTTPServer(Application(), max_body_size=150*1024*1024)
+    http_server = tornado.httpserver.HTTPServer(Application(), max_body_size=150*1024*1024)
     http_server.listen(web_config["port"])
     tornado.ioloop.IOLoop.current().start()
 

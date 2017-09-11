@@ -4,14 +4,13 @@ import os
 
 
 from app.contriller.base import HomeHandler, ArticleHandler, FeedHandler, ArchiveHandler, BaseHandler
-from app.contriller.index import ComposeHandler, CallbackHandler, Test1Handler, FeedBackHandler
+from app.contriller.functions import ComposeHandler, CallbackHandler, Test1Handler, FeedBackHandler, ToolsHandler
 from app.contriller.auth import AuthCreateHandler, AuthLoginHandler, AuthLogoutHandler
-from app.contriller.upload import UploadPOSTHandler, UploadHtmlHandler, AnalysisHandler
+from app.contriller.upload import UploadPOSTHandler, UploadHtmlHandler
 
 
 handlers = [
     (r"/", HomeHandler),
-    (r"/analysis", AnalysisHandler),
     (r"/archive", ArchiveHandler),
     (r"/article/([^/]+)", ArticleHandler),
     (r"/auth/create", AuthCreateHandler),
@@ -22,6 +21,7 @@ handlers = [
     (r"/feedback", FeedBackHandler),
     (r"/hihi", FeedHandler),
     (r"/test", Test1Handler),
+    (r"/tools/?(.*)", ToolsHandler),
     (r"/upload", UploadHtmlHandler),
     (r"/upload/post", UploadPOSTHandler),
 
