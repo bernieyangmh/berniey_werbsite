@@ -44,7 +44,13 @@ class HomeHandler(BaseHandler):
                                  FROM articles  left join users
                                  on articles.users_id = users.id
                                   ORDER BY articles.created_time DESC LIMIT  5""")
-        self.render("home.html", articles=articles)
+        feedback = self.db.query("""
+                                Select user_name, content, created_time
+                                From feedback
+                                ORDER BY created_time DESC
+                                limit 20
+                                """)
+        self.render("home.html", articles=articles, feedback=feedback)
 
 
 class ArticleHandler(BaseHandler):

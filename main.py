@@ -15,7 +15,7 @@ class Application(tornado.web.Application):
 
         self.db = torndb.Connection(
             host=db_config["mysql_host"], database=db_config["mysql_database"],
-            user=db_config["mysql_user"], password=db_config["mysql_password"])
+            user=db_config["mysql_user"], password=db_config["mysql_password"], time_zone="+8:00")
 
 
 class ArticleModule(tornado.web.UIModule):
@@ -26,6 +26,7 @@ class ArticleModule(tornado.web.UIModule):
 
 def main():
     http_server = tornado.httpserver.HTTPServer(Application())
+    # http_server = tornado.httpserver.HTTPServer(Application(), max_body_size=150*1024*1024)
     http_server.listen(web_config["port"])
     tornado.ioloop.IOLoop.current().start()
 

@@ -51,4 +51,39 @@
   <div><a href="/archive">{{ _("Archive") }}</a></div>
   {% from datetime import datetime %}
   <div class="date">{{ locale.format_date(datetime.now(), full_format=True, shorter=True) }}</div>
+
+
+<div class="ui comments">
+  <h3 class="ui dividing header">留言板</h3>
+
+{% if feedback %}
+{% for i in feedback %}
+  <div class="comment">
+    <a class="avatar">
+      <img src="/images/avatar/small/matt.jpg">
+    </a>
+    <div class="content">
+      <a class="author">{{ i.user_name }}</a>
+      <div class="metadata">
+        <span class="date">{{ i.created_time }}</span>
+      </div>
+      <div class="text">{{ i.content }}</div>
+      <div class="actions">
+        <a class="reply">Reply</a>
+      </div>
+    </div>
+  </div>
+<div class="ui divider"></div>
+{% end %}
+
+{% end %}
+
+<textarea rows="4" cols="50" name="feedback" placeholder="反馈" form="feedback"></textarea>
+<form class="ui form" action="/feedback" method="POST" id="feedback">
+  <input type="submit" value="提交" class="ui blue  submit icon button">
+</form>
+</div>
+
+
+
 {% end %}

@@ -6,7 +6,7 @@ import markdown
 import unicodedata
 import re
 from tornado.queues import Queue
-d={}
+d = {}
 
 class ComposeHandler(BaseHandler):
     @tornado.web.authenticated
@@ -62,6 +62,33 @@ class CallbackHandler(BaseHandler):
         print self.request.__dict__
         print args
         d.update({args: self.request.__dict__})
+
+
+class FeedBackHandler(BaseHandler):
+
+    def post(self, *args, **kwargs):
+        print "FeedBackHandler_post"
+        content = self.get_arguments("feedback").pop() if self.get_arguments("feedback") else "null"
+        print content
+        print type(content)
+        content = content.replace('"', '\\"')
+
+        if self.current_user:
+            users_id = self.current_user.get("id")
+            user_name = self.current_user.get("username")
+            self.db.execute(u"""
+                            Insert into feedback(users_id, user_name, content, created_time)
+                              values
+                            ({}, "{}", "{}", now())
+                            """.format(users_id, user_name, content))
+        else:
+            self.db.execute(u"""
+                            Insert into feedback(content, created_time)
+                              values
+                            ("{}", now())
+                            """.format(content))
+
+
 
 
 class Test1Handler(BaseHandler):

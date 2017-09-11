@@ -47,21 +47,6 @@ class UploadPOSTHandler(BaseHandler):
         self.render("data_analysis.html", res=res)
 
 
-@tornado.web.stream_request_body
-class UploadPUTHandler(BaseHandler):
-    def initialize(self):
-        self.bytes_read = 0
-
-    def data_received(self, chunk):
-        self.bytes_read += len(chunk)
-
-    def put(self, filename):
-        filename = unquote(filename)
-        mtype = self.request.headers.get('Content-Type')
-        logging.info('PUT "%s" "%s" %d bytes', filename, mtype, self.bytes_read)
-        self.write('OK')
-
-
 class UploadHtmlHandler(BaseHandler):
 
     def get(self):
