@@ -2,14 +2,16 @@
 
 import time
 import re
+import sys
+import json, subprocess
+import tempfile
 
 from .base import BaseHandler
 import tornado.web
 import markdown
 import unicodedata
 from tornado.queues import Queue
-from extends.utils import get_timestamp_date, url_decode_encode
-
+from extends.utils import get_timestamp_date, url_decode_encode, python_script_run
 
 
 d = {}
@@ -126,3 +128,21 @@ class ToolsHandler(BaseHandler):
         else:
             url_code = None
         self.render("tools.html", timestamp_data_res=timestamp_data_res, url_code=url_code)
+
+
+class PythonHandler(BaseHandler):
+
+    def get(self):
+        print "PythonHandler_get"
+        self.render("func/python_script.html")
+
+    def post(self, *args, **kwargs):
+
+        # print self.get_arguments("python_script")
+        print self.get_arguments("version")
+        python_script_code = "# -*- coding: utf-8 -*- \n\n" + self.get_arguments("python_script")[0]
+
+        res_output = python_script_run(self.get_arguments("version")[0], python_script_code)
+
+        self.write(res_output)
+

@@ -1,0 +1,34 @@
+{% extends "../base.html" %}
+<script>
+    $('.ui.radio.checkbox')
+  .checkbox()
+;
+</script>
+
+{% block body %}
+
+<textarea name="python_script" rows="40" cols="100" placeholder="代码" form="python_code"></textarea>
+<form class="ui form" action="/python" method="POST" id="python_code">
+  <div class="inline fields">
+    <label>选择你的python版本</label>
+    <div class="field">
+      <div class="ui radio checkbox">
+        <input type="radio" name="version" value="3.6" checked="checked">
+        <label>python3.6</label>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui radio checkbox">
+        <input type="radio" name="version" value="2.7">
+        <label>python2.7</label>
+      </div>
+    </div>
+  </div>
+  <input type="submit" value="提交" class="ui blue  submit icon button">
+
+</form>
+
+
+
+{% end %}
+
