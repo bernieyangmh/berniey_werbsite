@@ -1,9 +1,14 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 import tornado.web
 
 
 class BaseHandler(tornado.web.RequestHandler):
+
+    def initialize(self):
+        self.thread_executor = self.application.thread_executor
+        self.submit = self.thread_executor.submit
+        self.redis_cache_manager = "redis_cache_manager"
 
     @property
     def db(self):

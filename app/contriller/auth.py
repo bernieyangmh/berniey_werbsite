@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from .base import BaseHandler
 import tornado.web
 import concurrent.futures
@@ -6,10 +6,10 @@ import bcrypt
 from tornado import gen, escape
 
 
-executor = concurrent.futures.ThreadPoolExecutor(2)
 
 
 class AuthCreateHandler(BaseHandler):
+
     def get(self):
         print 'AuthCreateHandler_get'
         self.render("create_author.html", error='what')
@@ -17,7 +17,8 @@ class AuthCreateHandler(BaseHandler):
     @gen.coroutine
     def post(self):
         print 'AuthCreateHandler_post'
-        hash_password = yield executor.submit(
+
+        hash_password = yield self.submit(
             bcrypt.hashpw, tornado.escape.utf8(self.get_argument("password")),
             bcrypt.gensalt())
         author_id = self.db.execute(
@@ -45,7 +46,7 @@ class AuthLoginHandler(BaseHandler):
         if not user:
             self.render("login.html", error="hi,email not found")
             return
-        hash_password = yield executor.submit(
+        hash_password = yield self.submit(
             bcrypt.hashpw, escape.utf8(self.get_argument("password")),
             escape.utf8(user.hash_password))
         if hash_password == user.hash_password:

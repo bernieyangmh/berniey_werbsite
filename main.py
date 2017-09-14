@@ -1,9 +1,8 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 import concurrent.futures
 import tornado.ioloop
 import tornado.web
-import tornadoredis
 import tornadis
 from config import handlers, settings, mysql_config, web_config, redis_cache_config
 import torndb
@@ -15,19 +14,12 @@ class Application(tornado.web.Application):
     def __init__(self):
         settings.update(ui_modules={"Article": ArticleModule})
         super(Application, self).__init__(handlers, **settings)
-        self.thread_executor = concurrent.futures.ThreadPoolExecutor()
+        self.thread_executor = concurrent.futures.ThreadPoolExecutor(4)
+        self.redis_cache_manager = "redis_cache_manager"
 
         self.db = torndb.Connection(
             host=mysql_config["mysql_host"], database=mysql_config["mysql_database"],
             user=mysql_config["mysql_user"], password=mysql_config["mysql_password"], time_zone="+8:00")
-
-        self.redis_cache = tornadis.Connection(
-            host=redis_cache_config['host'], port=redis_cache_config['port'],
-            stop_after=redis_cache_config['stop_after'])
-
-        self.redis_cache = tornadoredis.Connection(
-            host=redis_cache_config['host'], port=redis_cache_config['port'],
-            stop_after=redis_cache_config['stop_after'])
 
 
 class ArticleModule(tornado.web.UIModule):

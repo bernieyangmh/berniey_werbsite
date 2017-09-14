@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 import logging
 from urllib import unquote
@@ -14,7 +14,6 @@ from extends.utils import data_analysis
 base_path = os.path.dirname(os.path.realpath(__file__))
 dir_name = os.path.join(base_path.split("app")[0], 'upload_files')
 
-executor = futures.ThreadPoolExecutor(2)
 
 
 class UploadPOSTHandler(BaseHandler):
@@ -41,9 +40,7 @@ class UploadPOSTHandler(BaseHandler):
                 file_path = os.path.join(user_path, filename)
                 with open(r'%s' % file_path, "w") as data:
                     data.write(body)
-        print "upload finished"
-        res = yield executor.submit(data_analysis, user_path, 20)
-        print "finished"
+        res = yield self.submit(data_analysis, user_path, 20)
         self.render("data_analysis.html", res=res)
 
 

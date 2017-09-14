@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 import os
 
@@ -44,12 +44,11 @@ settings = dict(
 web_config = {"port": "8888"}
 
 mysql_config = {"mysql_host": "127.0.0.1:3306", "mysql_database": "website",
-             "mysql_user": "work", "mysql_password": "123"
-             }
+                "mysql_user": "work", "mysql_password": "123"}
 
 redis_cache_config = dict(
-    db_no=1,
     host="localhost",
     port=6379,
-    stop_after=10
+    client_timeout=10,
+    max_size=4,
 )
