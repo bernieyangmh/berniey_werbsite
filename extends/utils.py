@@ -8,8 +8,11 @@ import time
 import urllib
 import tempfile
 import subprocess
+from tornado.concurrent import Future
+
 from data_analysis.data import DataCore
 from data_analysis.util import print_summary_information
+
 
 tem_dir = tempfile.mkdtemp(suffix='_python_code', prefix='website_')
 python_file_index = 0
@@ -44,18 +47,18 @@ def url_decode_encode(url):
 
 def python_script_run(version, code):
     global python_file_index
-
+    future = Future()
 
     python_file_name = "python_%d" % python_file_index
     python_file_index += 1
     python_file_path = os.path.join(tem_dir, '%s.py' % python_file_name)
     code = code.encode('utf-8')
     if code.find("import") != -1:
-        return "抱歉，不能使用import关键字"
+        future.set_result("抱歉，不能使用import关键字")
+        return future
 
     with open(python_file_path, 'w') as f:
         f.write(code)
-    print('Code wrote to: %s' % python_file_path)
     try:
         if version == '3.6':
             res_ouput = subprocess.check_output([exec_3, python_file_path], stderr=subprocess.STDOUT)
@@ -63,4 +66,5 @@ def python_script_run(version, code):
             res_ouput = subprocess.check_output([exec_2, python_file_path], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         res_ouput = dict(error='Exception', output=e.output)
-    return res_ouput
+    future.set_result(res_ouput)
+    return future

@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css"></head>
 
-
+{% if callback_request %}
 <table class="pure-table">
     <thead>
         <tr>
@@ -19,3 +19,23 @@
     {% end %}
     {% end %}
 </table>
+
+{% else %}
+<div>使用说明</div>
+<div>该接口接收post请求，并可通过get方法查询特定请求</div>
+<div>1.选择一个特定的参数值，建议hash当前时间+独有字符串用来区分其他post请求
+    2.构建post请求
+    <div>
+        POST / HTTP/1.1
+        Host: www.berniey.com
+        接口地址:/callback?{特定参数}
+        {
+        "key1":value1,
+        "key2":value2,
+        "key3":value3,
+        }
+    </div>
+</div>
+
+
+{% end %}

@@ -5,11 +5,10 @@ import re
 import sys
 import json, subprocess
 import tempfile
-
-from .base import BaseHandler
-import tornado.web
 import markdown
 import unicodedata
+from .base import BaseHandler
+from tornado import gen, web, concurrent
 from tornado.queues import Queue
 from extends.utils import get_timestamp_date, url_decode_encode, python_script_run
 
@@ -19,16 +18,16 @@ d = {}
 
 
 class ComposeHandler(BaseHandler):
-    @tornado.web.authenticated
+    @web.authenticated
     def get(self):
         print 'ComposeHandler_get'
         id = self.get_argument("id", None)
         article = None
         if id:
-            article = self.db.get("SELECT * FROM articles WHERE id = %s", int(id))
+            article = self.db.get("SELECT id, title, markdown, slug FROM articles WHERE id = %s", int(id))
         self.render("compose.html", article=article)
 
-    @tornado.web.authenticated
+    @web.authenticated
     def post(self):
         print 'ComposeHandler_post'
         id = self.get_argument("id", None)
@@ -36,8 +35,9 @@ class ComposeHandler(BaseHandler):
         text = self.get_argument("markdown")
         html = markdown.markdown(text)
         if id:
-            article = self.db.get("SELECT * FROM articles WHERE id = %s", int(id))
-            if not article: raise tornado.web.HTTPError(404)
+            article = self.db.get("SELECT slug FROM articles WHERE id = %s", int(id))
+            if not article:
+                raise web.HTTPError(404)
             slug = article.slug
             self.db.execute(
                 "UPDATE articles SET title = %s, markdown = %s, html = %s "
@@ -50,8 +50,9 @@ class ComposeHandler(BaseHandler):
             if not slug:
                 slug = "article"
             while True:
-                e = self.db.get("SELECT * FROM articles WHERE slug = %s", slug)
-                if not e: break
+                e = self.db.get("SELECT id FROM articles WHERE slug = %s", slug)
+                if not e:
+                    break
                 slug += "-2"
             title = title.encode("utf-8")
             text = text.encode("utf-8")
@@ -66,12 +67,12 @@ class ComposeHandler(BaseHandler):
 class CallbackHandler(BaseHandler):
 
     def get(self, *args, **kwargs):
-        self.render("callback.html", callback_request=d.get(args, {}))
+
+        self.render("callback.html", callback_request=d.get(self.request.query, {}))
 
     def post(self, *args, **kwargs):
-        print self.request.__dict__
-        print args
-        d.update({args: self.request.__dict__})
+        if self.request.query:
+            d.update({self.request.query: self.request.__dict__})
 
 
 class FeedBackHandler(BaseHandler):
@@ -109,8 +110,9 @@ class Test1Handler(BaseHandler):
 class ToolsHandler(BaseHandler):
 
     def get(self, *args, **kwargs):
-        timestamp=None
-        self.render("tools.html", timestamp=timestamp)
+        timestamp_data_res = None
+        url_code = None
+        self.render("tools.html", timestamp_data_res=timestamp_data_res, url_code=url_code)
 
     def post(self, *args, **kwargs):
         print "ToolsHandler_post"
@@ -136,13 +138,13 @@ class PythonHandler(BaseHandler):
         print "PythonHandler_get"
         self.render("func/python_script.html")
 
+    @gen.coroutine
     def post(self, *args, **kwargs):
 
-        # print self.get_arguments("python_script")
-        print self.get_arguments("version")
+        print "PythonHandler_post"
         python_script_code = "# -*- coding: utf-8 -*- \n\n" + self.get_arguments("python_script")[0]
 
-        res_output = python_script_run(self.get_arguments("version")[0], python_script_code)
+        res_output = yield python_script_run(self.get_arguments("version")[0], python_script_code)
 
         self.write(res_output)
 

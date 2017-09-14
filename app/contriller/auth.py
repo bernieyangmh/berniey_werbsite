@@ -40,7 +40,7 @@ class AuthLoginHandler(BaseHandler):
     @gen.coroutine
     def post(self):
         print 'AuthLoginHandler_post'
-        user = self.db.get("SELECT * FROM users WHERE email = %s",
+        user = self.db.get("SELECT hash_password, id FROM users WHERE email = %s",
                              self.get_argument("email"))
         if not user:
             self.render("login.html", error="hi,email not found")
@@ -50,11 +50,6 @@ class AuthLoginHandler(BaseHandler):
             escape.utf8(user.hash_password))
         if hash_password == user.hash_password:
             self.set_secure_cookie("user_cookies", str(user.id))
-            print self.cookies
-            print self.get_argument("next", "/")
-            print self.any_author_exists()
-            print self.get_secure_cookie("user_cookies")
-            print self.get_current_user()
             self.redirect(self.get_argument("next", "/"))
         else:
             self.render("login.html", error="incorrect password")

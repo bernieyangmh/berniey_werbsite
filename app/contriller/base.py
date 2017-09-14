@@ -17,7 +17,7 @@ class BaseHandler(tornado.web.RequestHandler):
         return a
 
     def any_author_exists(self):
-        return bool(self.db.get("SELECT * FROM users LIMIT 1"))
+        return bool(self.db.get("SELECT id FROM users LIMIT 1"))
 
     def write_error(self, status_code, **kwargs):
         print "write_error"
@@ -66,7 +66,7 @@ class ArticleHandler(BaseHandler):
 class ArchiveHandler(BaseHandler):
     def get(self):
         print 'ArchiveHandler_get'
-        articles = self.db.query("SELECT * FROM articles ORDER BY update_time "
+        articles = self.db.query("SELECT title, created_time, slug FROM articles ORDER BY update_time "
                                 "DESC")
         self.render("archive.html", articles=articles)
 
