@@ -2,7 +2,7 @@
 # !/usr/bin/env python
 
 
-from util import data_after_argument, series_to_dataframe
+from .util import data_after_argument, series_to_dataframe
 
 __author__ = 'berniey'
 

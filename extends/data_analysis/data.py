@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 # !/usr/bin/env python
 
-from config import GetConfig
 
 import sys
 import os
 import pandas as pd
-from util import singleton, convert_time_format
-from data_analysis import DataAnalysisMethod
-from util import parse_limit, print_summary_information
+from .util import singleton, convert_time_format
+from .data_analysis import DataAnalysisMethod
+from .util import parse_limit, print_summary_information
 
 
 __author__ = 'berniey'

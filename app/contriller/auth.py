@@ -11,12 +11,11 @@ from tornado import gen, escape
 class AuthCreateHandler(BaseHandler):
 
     def get(self):
-        print 'AuthCreateHandler_get'
         self.render("create_author.html", error='what')
 
     @gen.coroutine
     def post(self):
-        print 'AuthCreateHandler_post'
+
 
         hash_password = yield self.submit(
             bcrypt.hashpw, tornado.escape.utf8(self.get_argument("password")),
@@ -32,7 +31,7 @@ class AuthCreateHandler(BaseHandler):
 
 class AuthLoginHandler(BaseHandler):
     def get(self):
-        print 'AuthLoginHandler_get'
+        print("AuthLoginHandler_get")
         if not self.any_author_exists():
             self.redirect("/auth/create")
         else:
@@ -40,7 +39,7 @@ class AuthLoginHandler(BaseHandler):
 
     @gen.coroutine
     def post(self):
-        print 'AuthLoginHandler_post'
+        print("AuthLoginHandler_post")
         user = self.db.get("SELECT hash_password, id FROM users WHERE email = %s",
                              self.get_argument("email"))
         if not user:
@@ -49,15 +48,18 @@ class AuthLoginHandler(BaseHandler):
         hash_password = yield self.submit(
             bcrypt.hashpw, escape.utf8(self.get_argument("password")),
             escape.utf8(user.hash_password))
+        print(hash_password)
+        print(user.hash_password)
         if hash_password == user.hash_password:
             self.set_secure_cookie("user_cookies", str(user.id))
             self.redirect(self.get_argument("next", "/"))
         else:
+            print("123")
             self.render("login.html", error="incorrect password")
 
 
 class AuthLogoutHandler(BaseHandler):
     def get(self):
-        print 'AuthLogoutHandler_get'
+
         self.clear_cookie("user_cookies")
         self.redirect(self.get_argument("next", "/"))

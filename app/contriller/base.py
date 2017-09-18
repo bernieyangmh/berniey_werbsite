@@ -8,7 +8,6 @@ class BaseHandler(tornado.web.RequestHandler):
     def initialize(self):
         self.thread_executor = self.application.thread_executor
         self.submit = self.thread_executor.submit
-        self.redis_cache_manager = "redis_cache_manager"
 
     @property
     def db(self):
@@ -25,7 +24,6 @@ class BaseHandler(tornado.web.RequestHandler):
         return bool(self.db.get("SELECT id FROM users LIMIT 1"))
 
     def write_error(self, status_code, **kwargs):
-        print "write_error"
         if status_code == 403:
             self.render("403.html")
         elif status_code == 404:
@@ -41,7 +39,6 @@ class BaseHandler(tornado.web.RequestHandler):
 class HomeHandler(BaseHandler):
 
     def get(self):
-        print 'HomeHandler_get'
         articles = self.db.query("""
                                 SELECT
                                  users.username, articles.created_time,articles.slug,
@@ -55,14 +52,15 @@ class HomeHandler(BaseHandler):
                                 ORDER BY created_time DESC
                                 limit 20
                                 """)
+
+        print(articles)
+        print(type(articles))
         self.render("home.html", articles=articles, feedback=feedback)
 
 
 class ArticleHandler(BaseHandler):
     def get(self, slug):
-        print 'AntryHandler_get'
         article = self.db.get("SELECT users.username, articles.created_time, articles.title,articles.html, articles.id, articles.users_id, articles.slug  FROM articles   left join users on  articles.users_id = users.id WHERE articles.slug = %s", slug)
-        print article
         if not article:
             raise tornado.web.HTTPError(404)
         self.render("article.html", article=article)
@@ -70,7 +68,6 @@ class ArticleHandler(BaseHandler):
 
 class ArchiveHandler(BaseHandler):
     def get(self):
-        print 'ArchiveHandler_get'
         articles = self.db.query("SELECT title, created_time, slug FROM articles ORDER BY update_time "
                                 "DESC")
         self.render("archive.html", articles=articles)
@@ -78,5 +75,4 @@ class ArchiveHandler(BaseHandler):
 
 class FeedHandler(BaseHandler):
     def get(self):
-        print 'FeedHandler_get'
-        self.render(".html")
+        self.render("hihi.html")

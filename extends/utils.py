@@ -9,9 +9,8 @@ import urllib
 import tempfile
 import subprocess
 from tornado.concurrent import Future
-
-from data_analysis.data import DataCore
-from data_analysis.util import print_summary_information
+from .data_analysis.data import DataCore
+from .data_analysis.util import print_summary_information
 
 
 tem_dir = tempfile.mkdtemp(suffix='_python_code', prefix='website_')
@@ -22,8 +21,7 @@ re_date = re.compile(r"^\d{4}\-\d{2}\-\d{2}\s\d{2}\:\d{2}\:\d{2}$")
 re_timestamp = re.compile(r"^[0-9]{1,45}$")
 
 def data_analysis(path, num):
-    print "data_analysis"
-    print path
+
     d = DataCore(path)
     d.generate_data()
     return print_summary_information(d, num=num)
@@ -68,3 +66,4 @@ def python_script_run(version, code):
         res_ouput = dict(error='Exception', output=e.output)
     future.set_result(res_ouput)
     return future
+

@@ -20,7 +20,7 @@ d = {}
 class ComposeHandler(BaseHandler):
     @web.authenticated
     def get(self):
-        print 'ComposeHandler_get'
+
         id = self.get_argument("id", None)
         article = None
         if id:
@@ -29,7 +29,7 @@ class ComposeHandler(BaseHandler):
 
     @web.authenticated
     def post(self):
-        print 'ComposeHandler_post'
+
         id = self.get_argument("id", None)
         title = self.get_argument("title")
         text = self.get_argument("markdown")
@@ -78,10 +78,9 @@ class CallbackHandler(BaseHandler):
 class FeedBackHandler(BaseHandler):
 
     def post(self, *args, **kwargs):
-        print "FeedBackHandler_post"
+
         content = self.get_arguments("feedback").pop() if self.get_arguments("feedback") else "null"
-        print content
-        print type(content)
+
         content = content.replace('"', '\\"')
 
         if self.current_user:
@@ -103,7 +102,17 @@ class FeedBackHandler(BaseHandler):
 
 
 class Test1Handler(BaseHandler):
+
+    @gen.coroutine
     def get(self, *args, **kwargs):
+        import tornadoredis
+        import tornado
+        c = tornadoredis.Client()
+        c.connect()
+        name = yield tornado.gen.Task(c.get, 'name')
+
+        print(name)
+
         self.render("test.html")
 
 
@@ -115,7 +124,7 @@ class ToolsHandler(BaseHandler):
         self.render("tools.html", timestamp_data_res=timestamp_data_res, url_code=url_code)
 
     def post(self, *args, **kwargs):
-        print "ToolsHandler_post"
+
 
         if self.get_arguments("timestamp"):
             timestamp_data_res = get_timestamp_date(self.get_arguments("timestamp")[0])
@@ -124,8 +133,7 @@ class ToolsHandler(BaseHandler):
 
         if self.get_arguments("urlcode"):
             url = self.get_arguments("urlcode")[0]
-            print url
-            print type(url)
+
             url_code = url_decode_encode(url)
         else:
             url_code = None
@@ -135,13 +143,13 @@ class ToolsHandler(BaseHandler):
 class PythonHandler(BaseHandler):
 
     def get(self):
-        print "PythonHandler_get"
+
         self.render("func/python_script.html")
 
     @gen.coroutine
     def post(self, *args, **kwargs):
 
-        print "PythonHandler_post"
+
         python_script_code = "# -*- coding: utf-8 -*- \n\n" + self.get_arguments("python_script")[0]
 
         res_output = yield python_script_run(self.get_arguments("version")[0], python_script_code)

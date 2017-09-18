@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from urllib import unquote
 import os
 
 import tornado.web
 from tornado import gen
 from concurrent import futures
-from base import BaseHandler
+from .base import BaseHandler
 
 from extends.utils import data_analysis
 
@@ -20,7 +19,7 @@ class UploadPOSTHandler(BaseHandler):
 
     @gen.coroutine
     def post(self):
-        print self.request.arguments.get("user_dir")
+
         if self.request.arguments.get("user_dir")[0]:
             user_dir = self.request.arguments.get("user_dir")[0]
 
@@ -47,6 +46,6 @@ class UploadPOSTHandler(BaseHandler):
 class UploadHtmlHandler(BaseHandler):
 
     def get(self):
-        print "UploadHtmlHandler_get"
+
         self.render("upload.html")
 
