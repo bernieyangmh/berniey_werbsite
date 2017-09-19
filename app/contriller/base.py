@@ -8,6 +8,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def initialize(self):
         self.thread_executor = self.application.thread_executor
         self.submit = self.thread_executor.submit
+        self.c = self.application.c
 
     @property
     def db(self):
@@ -34,6 +35,15 @@ class BaseHandler(tornado.web.RequestHandler):
             self.render("500.html")
         if not self._finished:
             super(BaseHandler, self).write_error(status_code, **kwargs)
+
+    def handle_template(self, html):
+        if html:
+            self.write(html)
+            return html
+        else:
+            a = self.render("test.html")
+            return str(a, encoding="utf-8")
+
 
 
 class HomeHandler(BaseHandler):

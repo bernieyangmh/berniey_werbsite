@@ -99,21 +99,15 @@ class FeedBackHandler(BaseHandler):
                             """.format(content))
 
 
-
-
 class Test1Handler(BaseHandler):
 
     @gen.coroutine
     def get(self, *args, **kwargs):
-        import tornadoredis
-        import tornado
-        c = tornadoredis.Client()
-        c.connect()
-        name = yield tornado.gen.Task(c.get, 'name')
-
-        print(name)
-
-        self.render("test.html")
+        html = yield gen.Task(self.c.get, "test.html")
+        print(html)
+        html = self.handle_template(html)
+        print(type(html))
+        gen.Task(self.c.set, "test.html", html)
 
 
 class ToolsHandler(BaseHandler):

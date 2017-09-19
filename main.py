@@ -7,16 +7,16 @@ import tornado.web
 from config import handlers, settings, mysql_config, web_config, redis_cache_config
 import torndb
 import tornado.httpserver
-import pymysql
+import tornadoredis
+import tornado
 
 class Application(tornado.web.Application):
     def __init__(self):
         settings.update(ui_modules={"Article": ArticleModule})
         super(Application, self).__init__(handlers, **settings)
         self.thread_executor = concurrent.futures.ThreadPoolExecutor(4)
-
-
-
+        self.c = tornadoredis.Client()
+        self.c.connect()
         self.db = torndb.Connection(
             host=mysql_config["mysql_host"], database=mysql_config["mysql_database"],
             user=mysql_config["mysql_user"], password=mysql_config["mysql_password"], time_zone="+8:00")

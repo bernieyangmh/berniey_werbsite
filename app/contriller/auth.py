@@ -48,8 +48,7 @@ class AuthLoginHandler(BaseHandler):
         hash_password = yield self.submit(
             bcrypt.hashpw, escape.utf8(self.get_argument("password")),
             escape.utf8(user.hash_password))
-        print(hash_password)
-        print(user.hash_password)
+        hash_password = str(hash_password, encoding = "utf-8")
         if hash_password == user.hash_password:
             self.set_secure_cookie("user_cookies", str(user.id))
             self.redirect(self.get_argument("next", "/"))
